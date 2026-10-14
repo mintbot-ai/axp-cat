@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Submit a package - axp.cat{% endblock %}
+{% block content %}
+<h1>Submit a package</h1>
+<p class="lead">Paste a locator: a manifest URL, your publisher domain, or a GitHub repository URL. The gate fetches it the way a host would and lists the package when it passes. Resubmitting an already listed extension replaces it with the current release.</p>
+{% if error %}<div class="error" role="alert"><strong>Not listed.</strong> {{ error }}</div>{% endif %}
+<form method="post" action="/submit" class="submit">
+  <label for="locator">Locator</label>
+  <input id="locator" name="locator" type="text" value="{{ locator }}" placeholder="ext.example.com  or  https://github.com/you/my-ext" required maxlength="2048" autocomplete="off">
+  <button type="submit">Check and list</button>
+</form>
+<h2>Before you submit</h2>
+<ul class="checks">
+  <li>Run <code>axp validate agent-extension.json</code> and <code>axp verify agent-extension.json</code> locally; the gate runs the same checks.</li>
+  <li>Serve the manifest from <code>https://&lt;publisher&gt;/.well-known/agent-extension.json</code>, or advertise it with <code>&lt;link rel="agent-extension" href="..."&gt;</code> on your landing page.</li>
+  <li>Publishing on GitHub? Attach <code>agent-extension.json</code> to the release and list your signing key at <code>https://&lt;publisher&gt;/.well-known/agent-extension-keys.json</code> (<code>axp keydir</code> writes it). <code>axp resolve https://github.com/you/my-ext</code> shows what the gate will see.</li>
+  <li>The locator you submit is what visitors are told to install, so submit the one you want them to use.</li>
+</ul>
+{% endblock %}

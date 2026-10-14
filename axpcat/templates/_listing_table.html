@@ -1,0 +1,15 @@
+<table class="listings">
+  <thead><tr><th>Package</th><th>Version</th><th>Provides</th><th>Runtimes</th><th>Publisher</th></tr></thead>
+  <tbody>
+  {% for l in listings %}
+    {% set p = l.package %}
+    <tr>
+      <td><a href="/catalog/{{ p.ext_id }}"><strong>{{ p.display_name }}</strong></a><br><span class="muted">{{ p.description }}</span></td>
+      <td><code>{{ p.version }}</code>{% if p.channel != "stable" %} <span class="tag">{{ p.channel }}</span>{% endif %}</td>
+      <td>{{ p.provides | join(", ") }}</td>
+      <td>{{ p.runtimes | join(", ") }}</td>
+      <td><a href="/catalog?publisher={{ p.publisher }}">{{ p.publisher }}</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

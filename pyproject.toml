@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "axpcat"
+version = "0.1.0"
+description = "axp.cat - the public Agent Extension Protocol (AXP) site and the open catalog of packages that pass the standard."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.11"
+dependencies = [
+    "axp @ git+https://github.com/mintbot-ai/agent-extension@99079c420b95763bd86c9cab7464af9281b8d4e5",
+    "cryptography>=41",
+    "fastapi>=0.115",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
+    "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27"]
+
+[project.scripts]
+axpcat = "axpcat.__main__:main"
+
+[tool.setuptools]
+packages = ["axpcat"]
+
+[tool.setuptools.package-data]
+axpcat = ["templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

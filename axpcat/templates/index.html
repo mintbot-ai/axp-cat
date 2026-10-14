@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>One manifest to describe, install, update and verify an agent extension.</h1>
+  <p class="lead">The Agent Extension Protocol (AXP) is a runtime-neutral standard for packaged agent capabilities: memory backends, MCP servers, tools, channels, services, skills, prompts, panel views. A publisher writes one signed <code>agent-extension.json</code>; any host that speaks AXP can install it, keep it updated and know who signed it.</p>
+  <p class="actions">
+    <a class="button" href="/catalog">Browse the catalog{% if count %} ({{ count }}){% endif %}</a>
+    <a class="button secondary" href="{{ site.spec_url }}">Read the specification</a>
+  </p>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>An envelope, not a package manager</h2>
+    <p>AXP does not replace a runtime's own install machinery; it delegates to it. It is the common description layer every runtime can be generated from or mapped onto, the role OCI image manifests play across container runtimes. Nothing in the core names a vendor, a product or a registry.</p>
+  </div>
+  <div class="card">
+    <h2>Portable description</h2>
+    <p><code>identity</code> (publisher-namespaced), <code>provides</code> (what the extension adds), <code>requires</code> (what it needs) and <code>permissions</code> (the access surface it declares, with reasons). A user can read what they are consenting to before anything runs.</p>
+  </div>
+  <div class="card">
+    <h2>Per-runtime targets</h2>
+    <p>Concrete install recipes per runtime plus a <code>posix</code> baseline any host can execute: an archive, a digest and standalone <code>install</code> / <code>upgrade</code> / <code>uninstall</code> / <code>health</code> scripts with a fixed host-to-script contract.</p>
+  </div>
+  <div class="card">
+    <h2>Safe updates</h2>
+    <p>Semver and channels, three update sources (GitHub releases, a forge, a direct feed), monotonic progression, freshness windows and a per-extension policy. A widened permission surface asks for consent again.</p>
+  </div>
+  <div class="card">
+    <h2>Signing and trust</h2>
+    <p>ed25519 signatures over a canonical (JCS) form of the manifest, pinned on first use per extension id. Updates come only from the same key; rotation is announced and dual-signed; a lost key is recovered through the publisher's key directory.</p>
+  </div>
+  <div class="card">
+    <h2>Honest enforcement</h2>
+    <p>A host says which tier it really applies - <code>declared</code>, <code>advisory</code> or <code>enforced</code> - and conforms to a profile (Core, Trusted, Managed, Sandboxed). The reference sandbox runs lifecycle scripts in transient systemd units with name-based egress filtering.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Publish in three commands</h2>
+  <p>The reference implementation ships as the <code>axp</code> Python package and CLI (<code>pip install git+{{ site.spec_repo_url }}</code>).</p>
+<pre><code>axp init --publisher ext.example.com --name my-ext --description "..."
+axp keygen --out signing.key          # prints the ed25519 public key
+axp release agent-extension.json --bump patch --artifact dist/my-ext.tar.gz --key signing.key</code></pre>
+  <p>Serve the manifest from your domain (<code>/.well-known/agent-extension.json</code> or a <code>&lt;link rel="agent-extension"&gt;</code> on your landing page), or attach it to a GitHub release and list your key at <code>/.well-known/agent-extension-keys.json</code>. Then <a href="/submit">submit the locator</a> here.</p>
+</section>
+
+<section>
+  <h2>Install from the catalog</h2>
+  <p>Every listing shows its locator. On an AXP host you hand that locator to the install command; on <a href="https://mintbot.ai/">mintbot</a> you simply tell your agent <em>"install ext.example.com"</em> and it fetches, verifies, shows the declared permissions and asks before anything runs.</p>
+</section>
+
+<section id="checks">
+  <h2>What the catalog checks</h2>
+  <p>Anyone can submit a package. Nothing is listed until it passes the gate, which is the same path a host walks:</p>
+  <ol class="checks">
+    <li>The locator resolves to a manifest the way SPEC &sect;3.1 says: a <code>.json</code> URL, a landing page's <code>&lt;link rel="agent-extension"&gt;</code>, <code>/.well-known/agent-extension.json</code>, or a GitHub repository's newest release asset.</li>
+    <li>The reference validator accepts the manifest in full: identity grammar, every component, every target, permissions with the closed vocabularies of &sect;2.4.</li>
+    <li>The manifest is signed and the signature verifies against the key it carries.</li>
+    <li>The key is bound to the publisher: the manifest was served from the publisher's own domain, or the publisher's key directory lists the key for this extension (&sect;8.5). A code forge is never anybody's origin, so GitHub-hosted manifests are listed through the key directory only.</li>
+    <li>The release is not past its <code>valid_until</code> date. Listings are re-checked against their locator regularly.</li>
+  </ol>
+  <p>The gate judges form, signature and publisher binding, not quality or safety. Read the declared permissions before you install.</p>
+</section>
+
+{% if latest %}
+<section>
+  <h2>Recently listed</h2>
+  {% with listings = latest %}{% include "_listing_table.html" %}{% endwith %}
+</section>
+{% endif %}
+{% endblock %}

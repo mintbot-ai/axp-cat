@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ p.display_name }} ({{ p.ext_id }}) - axp.cat{% endblock %}
+{% block description %}{{ p.description }}{% endblock %}
+{% block content %}
+<p class="crumbs"><a href="/catalog">Catalog</a> / <a href="/catalog?publisher={{ p.publisher }}">{{ p.publisher }}</a> / {{ p.name }}</p>
+<h1>{{ p.display_name }} <span class="muted">{{ p.version }}</span>{% if p.channel != "stable" %} <span class="tag">{{ p.channel }}</span>{% endif %}</h1>
+<p class="lead">{{ p.description }}</p>
+
+<div class="install">
+  <h2>Install</h2>
+  <p>Hand this locator to your AXP host (on mintbot: tell your agent <em>"install {{ p.locator | replace("https://", "") }}"</em>):</p>
+  <pre><code>{{ p.locator }}</code></pre>
+</div>
+
+<section class="facts">
+  <dl>
+    <dt>Extension id</dt><dd><code>{{ p.ext_id }}</code></dd>
+    <dt>Publisher</dt><dd><a href="/catalog?publisher={{ p.publisher }}">{{ p.publisher }}</a></dd>
+    {% if p.homepage %}<dt>Homepage</dt><dd><a href="{{ p.homepage }}" rel="nofollow">{{ p.homepage }}</a></dd>{% endif %}
+    {% if p.license %}<dt>Licence</dt><dd>{{ p.license }}</dd>{% endif %}
+    {% if p.keywords %}<dt>Keywords</dt><dd>{{ p.keywords | join(", ") }}</dd>{% endif %}
+    <dt>Runtimes</dt><dd>{{ p.runtimes | join(", ") }}</dd>
+    <dt>Provides</dt><dd>{{ p.provides | join(", ") }}</dd>
+    {% if p.published_at %}<dt>Published</dt><dd>{{ p.published_at }}</dd>{% endif %}
+    {% if p.valid_until %}<dt>Valid until</dt><dd>{{ p.valid_until }}</dd>{% endif %}
+    <dt>Manifest</dt><dd><a href="{{ p.manifest_url }}" rel="nofollow">{{ p.manifest_url }}</a> <span class="muted">({{ p.source }})</span></dd>
+    <dt>Signing key</dt><dd><code class="key">{{ p.public_key }}</code>{% if p.key_id %} <span class="muted">key_id {{ p.key_id }}</span>{% endif %}<br><span class="muted">bound to the publisher via {{ "the manifest origin" if p.binding == "origin" else "the publisher key directory" }}</span></dd>
+    <dt>Listed</dt><dd>{{ listing.listed_at }} <span class="muted">&middot; last checked {{ listing.refreshed_at }}</span>{% if listing.refresh_error %}<br><span class="warn">last re-check failed: {{ listing.refresh_error }}</span>{% endif %}</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>Declared permissions</h2>
+  {% set perms = p.permissions %}
+  {% if perms %}
+  <dl class="perms">
+    {% for key in ["network_egress", "network_ingress", "filesystem", "secrets"] if perms.get(key) %}
+      <dt>{{ key.replace("_", " ") }}</dt><dd>{% for entry in perms[key] %}<code>{{ entry }}</code>{{ ", " if not loop.last }}{% endfor %}{% if perms.get("reason", {}).get(key) %}<br><span class="muted">{{ perms["reason"][key] }}</span>{% endif %}</dd>
+    {% endfor %}
+    <dt>root</dt><dd>{{ "yes" if perms.get("root") else "no" }}{% if perms.get("reason", {}).get("root") %}<br><span class="muted">{{ perms["reason"]["root"] }}</span>{% endif %}</dd>
+  </dl>
+  {% else %}
+  <p>None declared.</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Components</h2>
+  {% set provides = p.manifest.get("provides", {}) %}
+  {% for kind, items in provides.items() if items is iterable and items is not string and items is not mapping %}
+  <h3>{{ kind }}</h3>
+  <ul>
+    {% for item in items %}<li><code>{{ item.get("name", "") }}</code>{% if item.get("summary") %} - {{ item["summary"] }}{% elif item.get("title") %} - {{ item["title"] }}{% endif %}</li>{% endfor %}
+  </ul>
+  {% endfor %}
+</section>
+
+<details>
+  <summary>Manifest as admitted</summary>
+  <pre><code>{{ p.manifest | pretty_json }}</code></pre>
+</details>
+<p class="muted">Machine-readable: <a href="/api/catalog/{{ p.ext_id }}.json">/api/catalog/{{ p.ext_id }}.json</a></p>
+{% endblock %}

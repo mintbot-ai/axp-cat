@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Catalog - axp.cat{% endblock %}
+{% block content %}
+<h1>Catalog</h1>
+<p class="lead">{{ count }} package{{ "" if count == 1 else "s" }} that pass the AXP standard. Every entry is a signed manifest bound to its publisher; <a href="/#checks">what the gate checks</a>.</p>
+<form class="search" method="get" action="/catalog">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search name, description, keyword" aria-label="Search">
+  {% if publisher %}<input type="hidden" name="publisher" value="{{ publisher }}">{% endif %}
+  <button type="submit">Search</button>
+</form>
+{% if publisher %}<p>Publisher <strong>{{ publisher }}</strong> &middot; <a href="/catalog{% if q %}?q={{ q }}{% endif %}">all publishers</a></p>{% endif %}
+{% if listings %}
+  {% include "_listing_table.html" %}
+{% else %}
+  <p class="empty">Nothing matches{% if q or publisher %} your filter{% endif %}. {% if not count %}The catalog is brand new - <a href="/submit">be the first to list a package</a>.{% endif %}</p>
+{% endif %}
+{% if publishers|length > 1 %}
+<h2>Publishers</h2>
+<ul class="publishers">
+{% for name, n in publishers %}<li><a href="/catalog?publisher={{ name }}">{{ name }}</a> <span class="muted">({{ n }})</span></li>{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
