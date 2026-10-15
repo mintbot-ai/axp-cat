@@ -42,8 +42,12 @@ h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; }
 .card p { margin-bottom: 0; color: var(--muted); }
 ol.checks li, ul.checks li { margin-bottom: 0.5rem; max-width: 80ch; }
 table.listings { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-table.listings th, table.listings td { text-align: left; vertical-align: top; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
-table.listings th { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+table.listings th, table.listings td { text-align: left; vertical-align: top; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); }
+table.listings th { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+/* Only the description column may break inside a word; the short columns keep their tokens
+   (versions, domains, component names) whole and wrap only between list items. */
+table.listings td.package { width: 100%; overflow-wrap: anywhere; }
+table.listings td[data-label="Version"], table.listings td[data-label="Publisher"] { white-space: nowrap; }
 .muted { color: var(--muted); }
 .warn { color: var(--warn); }
 .tag { display: inline-block; background: var(--code-bg); border-radius: 999px; padding: 0 0.6em; font-size: 0.8em; }
@@ -101,7 +105,7 @@ table.compare tr.axp td:first-child { color: var(--accent); }
   table.listings, table.listings tbody, table.listings tr, table.listings td { display: block; }
   table.listings thead { display: none; }
   table.listings tr { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0.75rem 0; }
-  table.listings td { border: 0; padding: 0.15rem 0; }
+  table.listings td, table.listings td[data-label] { border: 0; padding: 0.15rem 0; white-space: normal; overflow-wrap: anywhere; }
   table.listings td.package { padding-bottom: 0.5rem; }
   table.listings td[data-label]::before { content: attr(data-label); display: inline-block; min-width: 5.5rem; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
   ul.publishers { columns: 1; }
