@@ -52,10 +52,14 @@ read-only access to its own code and a writable directory for the SQLite file.
 
 ## Deployment
 
-axp.cat runs on the mintbot.ai central servers (`dev.axp.cat` follows `main`
-automatically; `axp.cat` is promoted by hand). The service unit, the nginx
-vhost and the certificate bootstrap live in the mintbot repository, which pins
-this repository at a commit; this repository holds only the application.
+axp.cat runs on the mintbot.ai central servers, each following one branch of
+this repository: `dev.axp.cat` serves `main`, `axp.cat` serves `live`. A
+timer on each server fetches every two minutes and, when the branch moved,
+installs the tip and restarts the service behind a `/health` gate (a commit
+that fails the gate is rolled back and skipped until the branch moves again).
+Promoting is `git push origin main:live`; rolling back is a push too. The
+service unit, the nginx vhost and the certificate bootstrap live in the
+mintbot repository; this repository holds only the application.
 
 ## Licence
 

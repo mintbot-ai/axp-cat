@@ -27,9 +27,10 @@ def test_index_and_empty_catalog(client):
     assert 'id="compare"' in index.text and "A2A" in index.text and "Model Context Protocol" in index.text
     assert 'id="fig-problem"' in index.text and 'id="fig-layers"' in index.text
     assert "style=" not in index.text
-    # The package-manager comparison and the header logo (box with cat ears, inline SVG).
+    # The package-manager comparison and the header logo (a cat head, inline SVG, no inline styles).
     assert 'id="why-not-apt"' in index.text and "npm" in index.text
-    assert '<svg class="logo"' in index.text and 'class="cat"' in index.text
+    assert '<svg class="logo"' in index.text and 'class="head"' in index.text and 'class="eye"' in index.text
+    assert 'class="cat"' in index.text
     assert index.headers["content-security-policy"].startswith("default-src 'self'")
     assert index.headers["x-content-type-options"] == "nosniff"
     catalog = client.get("/catalog")
