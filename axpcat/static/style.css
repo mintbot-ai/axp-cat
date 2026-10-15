@@ -14,9 +14,16 @@ code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
 pre { background: var(--code-bg); padding: 0.9rem 1rem; border-radius: 8px; overflow-x: auto; }
 pre code { background: none; padding: 0; }
 header.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; max-width: 1040px; margin: 0 auto; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); }
-.brand { font-weight: 700; text-decoration: none; color: var(--fg); font-size: 1.1rem; }
-.mark { display: inline-block; background: var(--accent); color: var(--accent-fg); border-radius: 6px; padding: 0.05em 0.45em; margin-right: 0.4em; font-size: 0.85em; letter-spacing: 0.04em; }
-nav a { margin-left: 1.25rem; text-decoration: none; color: var(--fg); }
+/* The brand: a package box with cat ears (the catalog's cat) carrying the AXP mark, then the wordmark.
+   Inline SVG styled through classes so it follows dark mode and stays CSP-clean. */
+.brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; text-decoration: none; color: var(--fg); font-size: 1.25rem; }
+.brand .logo { width: 40.5px; height: 36px; flex: none; overflow: visible; }
+.logo .body { fill: var(--accent); }
+.logo .face { fill: var(--accent-fg); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.02em; }
+.logo .tail { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; }
+.brand .cat { color: var(--accent); }
+nav { display: flex; flex-wrap: wrap; gap: 0.2rem 1.25rem; }
+nav a { text-decoration: none; color: var(--fg); }
 nav a:hover { color: var(--accent); }
 main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
 footer { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
@@ -35,7 +42,7 @@ h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; }
 .card p { margin-bottom: 0; color: var(--muted); }
 ol.checks li, ul.checks li { margin-bottom: 0.5rem; max-width: 80ch; }
 table.listings { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-table.listings th, table.listings td { text-align: left; vertical-align: top; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); }
+table.listings th, table.listings td { text-align: left; vertical-align: top; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
 table.listings th { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 .muted { color: var(--muted); }
 .warn { color: var(--warn); }
@@ -88,4 +95,14 @@ table.compare td:first-child .muted { font-weight: 400; }
 table.compare tr.axp td { background: var(--code-bg); }
 table.compare tr.axp td:first-child { color: var(--accent); }
 @media (max-width: 640px) { table.compare td:first-child { white-space: normal; } svg.diagram text { font-size: 14px; } svg.diagram .label, svg.diagram .proto, svg.diagram .mono { font-size: 13px; } }
-@media (max-width: 640px) { dl { grid-template-columns: 1fr; gap: 0.1rem 0; } dt { margin-top: 0.6rem; } .hero h1 { font-size: 1.8rem; } nav a { margin-left: 0.9rem; } }
+@media (max-width: 640px) { dl { grid-template-columns: 1fr; gap: 0.1rem 0; } dt { margin-top: 0.6rem; } .hero h1 { font-size: 1.8rem; } nav { gap: 0.2rem 0.9rem; } }
+/* On a phone the five-column listing becomes a stack of cards and each cell names its column. */
+@media (max-width: 640px) {
+  table.listings, table.listings tbody, table.listings tr, table.listings td { display: block; }
+  table.listings thead { display: none; }
+  table.listings tr { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0.75rem 0; }
+  table.listings td { border: 0; padding: 0.15rem 0; }
+  table.listings td.package { padding-bottom: 0.5rem; }
+  table.listings td[data-label]::before { content: attr(data-label); display: inline-block; min-width: 5.5rem; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  ul.publishers { columns: 1; }
+}

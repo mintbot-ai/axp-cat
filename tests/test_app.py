@@ -27,6 +27,9 @@ def test_index_and_empty_catalog(client):
     assert 'id="compare"' in index.text and "A2A" in index.text and "Model Context Protocol" in index.text
     assert 'id="fig-problem"' in index.text and 'id="fig-layers"' in index.text
     assert "style=" not in index.text
+    # The package-manager comparison and the header logo (box with cat ears, inline SVG).
+    assert 'id="why-not-apt"' in index.text and "npm" in index.text
+    assert '<svg class="logo"' in index.text and 'class="cat"' in index.text
     assert index.headers["content-security-policy"].startswith("default-src 'self'")
     assert index.headers["x-content-type-options"] == "nosniff"
     catalog = client.get("/catalog")
@@ -54,6 +57,8 @@ def test_submit_lists_a_valid_package(client):
     assert "Sample Memory" in client.get("/").text  # shows up under "recently listed"
     assert "Sample Memory" in client.get("/catalog?q=graph").text
     assert "Nothing matches" in client.get("/catalog?q=toaster").text
+    # Listing cells carry their column name so the phone layout can show it.
+    assert 'data-label="Publisher"' in client.get("/catalog").text
 
 
 def test_submit_rejection_shows_the_reason(client, fake_fetch, manifest):

@@ -26,6 +26,17 @@
   <p>AXP is deliberately an <strong>envelope, not a package manager</strong>. It does not replace a runtime's own install machinery; it delegates to it. It is the common description layer every runtime can be generated from or mapped onto, the role OCI image manifests play across container runtimes. Nothing in the core names a vendor, a product or a registry.</p>
 </section>
 
+<section id="why-not-apt">
+  <h2>Why not just apt, npm or pip?</h2>
+  <p>Package managers answer a narrower question: how do the files of one ecosystem get onto a machine? An agent extension is seldom one artifact in one ecosystem. The same capability may be a Hermes plugin, an MCP server, a skill folder and a systemd unit, and every runtime wants it registered its own way. No package manager knows what a runtime is, so <code>apt install</code> cannot tell Hermes that a plugin has arrived. Three things they do not carry:</p>
+  <ul class="checks">
+    <li><strong>Consent.</strong> A package manager lists dependencies and files. It does not say that the thing reads your secrets, talks to these three hosts or installs a unit as root, let alone why. An npm <code>postinstall</code> runs whatever it likes and declares nothing. AXP states that surface up front, and a widened surface asks the user again.</li>
+    <li><strong>Trust.</strong> apt and npm trust a registry, and the registry trusts whoever holds the account. AXP binds the signing key to the publisher's own domain, pins it on first use and accepts updates only from the same key. There is no account to take over and no central registry to compromise.</li>
+    <li><strong>Updates.</strong> A package manager updates when you run it, to whatever the registry holds now. An AXP manifest says where updates come from, on which channel, how fresh a release must be, and that versions only move forward.</li>
+  </ul>
+  <p>AXP does not compete with them; it uses them. An install recipe is free to run <code>pip install</code>, <code>npm install</code> or <code>apt-get</code>. The manifest is the layer above: who signed this, what it will touch, and how it stays current.</p>
+</section>
+
 <section id="compare">
   <h2>How AXP relates to MCP, A2A and plugin systems</h2>
   <p>They are easy to confuse because they all have "agent" in the name, but they answer different questions and sit at different layers. MCP and A2A are about agents <em>working</em>: an agent calling a tool, an agent handing a task to another agent. AXP is about how the things they work with <em>get onto the machine</em>, stay updated and stay trustworthy, before anything runs.</p>
@@ -40,6 +51,7 @@
       <tr><td>MCP<br><span class="muted">Model Context Protocol</span></td><td>How does an agent call a tool or read context?</td><td>agent runtime &harr; tool server</td><td>while the agent runs</td></tr>
       <tr><td>A2A<br><span class="muted">Agent2Agent</span></td><td>How does one agent hand work to another agent?</td><td>agent &harr; agent</td><td>while the agents run</td></tr>
       <tr><td>Plugin systems<br><span class="muted">Hermes, OpenClaw, Claude Code, &hellip;</span></td><td>How does this one runtime load code?</td><td>runtime &harr; its own plugin format</td><td>at load time, per runtime</td></tr>
+      <tr><td>Package managers<br><span class="muted">apt, npm, pip, &hellip;</span></td><td>How do the files of one ecosystem get onto a machine?</td><td>registry &rarr; machine</td><td>when you run them</td></tr>
       <tr class="axp"><td>AXP<br><span class="muted">Agent Extension Protocol</span></td><td>How does a capability get installed, updated and verified, whichever runtime?</td><td>publisher &rarr; host &rarr; runtime</td><td>before anything runs, and at every update</td></tr>
     </tbody>
   </table>
