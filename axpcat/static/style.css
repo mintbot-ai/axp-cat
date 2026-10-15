@@ -28,7 +28,11 @@ nav a:hover { color: var(--accent); }
 main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
 footer { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 2rem; max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 footer p { margin: 0; max-width: 60ch; }
+footer nav { gap: 0.2rem 0.5rem; }
 footer nav a { color: var(--muted); }
+footer nav a + a::before { content: "\00b7"; margin-right: 0.5rem; color: var(--muted); }
+.foot-logo { flex-basis: 100%; display: flex; justify-content: center; margin-top: 1rem; }
+.foot-logo .logo { width: 27px; height: 24px; }
 h1 { font-size: 2rem; line-height: 1.2; margin: 0.5rem 0 1rem; }
 h2 { font-size: 1.3rem; margin: 2rem 0 0.6rem; }
 h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; }

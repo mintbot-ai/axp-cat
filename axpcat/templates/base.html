@@ -9,12 +9,15 @@
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 </head>
 <body>
+{% macro logo() -%}
+<svg class="logo" viewBox="0 0 72 64" aria-hidden="true" focusable="false">
+  <path class="head" d="M6 32 L10 6 L26 18 H46 L62 6 L66 32 V42 C66 55 53 62 36 62 C19 62 6 55 6 42 Z"/>
+  <text class="face" x="36" y="49" text-anchor="middle">AXP</text>
+</svg>
+{%- endmacro %}
 <header class="top">
   <a class="brand" href="/" aria-label="axp.cat home">
-    <svg class="logo" viewBox="0 0 72 64" aria-hidden="true" focusable="false">
-      <path class="head" d="M6 32 L10 6 L26 18 H46 L62 6 L66 32 V42 C66 55 53 62 36 62 C19 62 6 55 6 42 Z"/>
-      <text class="face" x="36" y="49" text-anchor="middle">AXP</text>
-    </svg>
+    {{ logo() }}
     <span class="wordmark">axp<span class="cat">.cat</span></span>
   </a>
   <nav>
@@ -33,6 +36,7 @@
     <a href="{{ site.site_repo_url }}">Site source</a>
     <a href="/api/catalog.json">Catalog API (JSON)</a>
   </nav>
+  <a class="foot-logo" href="/" aria-label="axp.cat home">{{ logo() }}</a>
 </footer>
 </body>
 </html>
