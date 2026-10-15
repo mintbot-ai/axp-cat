@@ -59,4 +59,33 @@ ul.publishers { columns: 2; list-style: none; padding: 0; }
 details { margin-top: 2rem; }
 summary { cursor: pointer; font-weight: 600; }
 .empty { color: var(--muted); }
+/* Inline SVG figures on the front page. Colours come from the page variables so the
+   figures follow dark mode; the CSP forbids inline styles, hence classes only. */
+figure.diagram { margin: 1.5rem 0 0.5rem; }
+figure.diagram figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 0.4rem; max-width: 80ch; }
+svg.diagram { display: block; width: 100%; height: auto; overflow: visible; }
+svg.diagram text { font-family: inherit; font-size: 13px; fill: var(--fg); }
+svg.diagram .heading { font-weight: 700; font-size: 14px; }
+svg.diagram .label { fill: var(--muted); font-size: 12px; }
+svg.diagram .proto { font-weight: 700; fill: var(--accent); font-size: 12px; letter-spacing: 0.04em; }
+svg.diagram .strong { font-weight: 700; }
+svg.diagram .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+svg.diagram .box { fill: var(--card); stroke: var(--line); stroke-width: 1.2; }
+svg.diagram .box.axp { fill: var(--accent); stroke: var(--accent); }
+svg.diagram .on-axp { fill: var(--accent-fg); }
+svg.diagram .divider { stroke: var(--line); stroke-width: 1; }
+svg.diagram .arrows line, svg.diagram .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+svg.diagram .arrows.tangled line { stroke: var(--warn); stroke-width: 1.2; opacity: 0.75; }
+svg.diagram .arrowhead { fill: var(--muted); }
+svg.diagram .arrowhead.warn { fill: var(--warn); }
+/* The protocol comparison table; on a phone it scrolls sideways instead of squeezing four columns. */
+.table-scroll { overflow-x: auto; margin: 1rem 0 0.5rem; }
+table.compare { width: 100%; min-width: 600px; border-collapse: collapse; }
+table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 0.6rem 0.6rem; border-bottom: 1px solid var(--line); }
+table.compare th { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+table.compare td:first-child { font-weight: 600; white-space: nowrap; }
+table.compare td:first-child .muted { font-weight: 400; }
+table.compare tr.axp td { background: var(--code-bg); }
+table.compare tr.axp td:first-child { color: var(--accent); }
+@media (max-width: 640px) { table.compare td:first-child { white-space: normal; } svg.diagram text { font-size: 14px; } svg.diagram .label, svg.diagram .proto, svg.diagram .mono { font-size: 13px; } }
 @media (max-width: 640px) { dl { grid-template-columns: 1fr; gap: 0.1rem 0; } dt { margin-top: 0.6rem; } .hero h1 { font-size: 1.8rem; } nav a { margin-left: 0.9rem; } }

@@ -1,0 +1,42 @@
+{# Where AXP sits next to A2A and MCP: those run while agents work, the runtime loads its
+   extensions its own way, and AXP is the delivery layer underneath that puts them there.
+   Same colour rules as _fig_problem.html (classes only, the CSP forbids inline styles). #}
+<svg class="diagram" viewBox="0 0 850 300" role="img" aria-labelledby="fig-layers-title" id="fig-layers">
+  <title id="fig-layers-title">A2A and MCP are used while agents run; each runtime loads extensions its own way; AXP is the layer below that delivers, installs, updates and verifies them.</title>
+  <defs>
+    <marker id="arrow-layers" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker>
+  </defs>
+
+  <!-- Band 1: while agents run -->
+  <text x="0" y="40" class="heading">While agents run</text>
+  <text x="0" y="60" class="label">agents and tools talk</text>
+  <rect x="190" y="28" width="150" height="36" rx="7" class="box"/><text x="265" y="51" text-anchor="middle">Another agent</text>
+  <line x1="340" y1="46" x2="430" y2="46" class="arrow both" marker-start="url(#arrow-layers)" marker-end="url(#arrow-layers)"/><text x="385" y="38" text-anchor="middle" class="proto">A2A</text>
+  <rect x="430" y="28" width="120" height="36" rx="7" class="box"/><text x="490" y="51" text-anchor="middle">Agent</text>
+  <line x1="550" y1="46" x2="640" y2="46" class="arrow both" marker-start="url(#arrow-layers)" marker-end="url(#arrow-layers)"/><text x="595" y="38" text-anchor="middle" class="proto">MCP</text>
+  <rect x="640" y="28" width="150" height="36" rx="7" class="box"/><text x="715" y="51" text-anchor="middle">Tool server</text>
+  <text x="490" y="88" text-anchor="middle" class="label">the agent, the other agent and the tool server all had to get onto the machine first</text>
+
+  <!-- Band 2: the runtime loads its extensions -->
+  <text x="0" y="142" class="heading">Loading extensions</text>
+  <text x="0" y="162" class="label">each runtime, its own way</text>
+  <rect x="190" y="120" width="660" height="54" rx="7" class="box"/>
+  <text x="520" y="143" text-anchor="middle">Hermes plugins &middot; OpenClaw extensions &middot; Claude Code plugins &middot; the next runtime&apos;s format</text>
+  <text x="520" y="163" text-anchor="middle" class="label">different folders, file formats and install steps on every one of them</text>
+
+  <!-- Arrows: AXP puts the extensions there -->
+  <g class="arrows" marker-end="url(#arrow-layers)">
+    <line x1="330" y1="218" x2="330" y2="176"/>
+    <line x1="520" y1="218" x2="520" y2="176"/>
+    <line x1="710" y1="218" x2="710" y2="176"/>
+  </g>
+  <text x="425" y="202" text-anchor="middle" class="label">install &middot; update &middot; verify</text>
+  <text x="615" y="202" text-anchor="middle" class="label">install &middot; update &middot; verify</text>
+
+  <!-- Band 3: AXP, before anything runs -->
+  <text x="0" y="252" class="heading">Before anything runs</text>
+  <text x="0" y="272" class="label">and at every update</text>
+  <rect x="190" y="222" width="660" height="66" rx="9" class="box axp"/>
+  <text x="520" y="248" text-anchor="middle" class="on-axp strong">AXP: publisher &rarr; one signed manifest &rarr; any host</text>
+  <text x="520" y="272" text-anchor="middle" class="on-axp">who signed it &middot; what it needs &middot; an install recipe per runtime &middot; where updates come from</text>
+</svg>

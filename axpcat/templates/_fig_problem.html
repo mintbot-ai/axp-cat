@@ -1,0 +1,53 @@
+{# The problem in one picture: every publisher x every runtime versus one signed manifest.
+   Inline SVG so it inherits the page's colours (CSS variables via classes in style.css);
+   the CSP forbids inline style attributes, so every colour is a class. #}
+<svg class="diagram" viewBox="0 0 850 268" role="img" aria-labelledby="fig-problem-title" id="fig-problem">
+  <title id="fig-problem-title">Without AXP every publisher ships a separate package for every runtime; with AXP one signed manifest reaches every host.</title>
+  <defs>
+    <marker id="arrow-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker>
+    <marker id="arrow-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead warn"/></marker>
+  </defs>
+
+  <!-- Without AXP -->
+  <text x="0" y="18" class="heading">Without AXP</text>
+  <g class="col">
+    <rect x="0" y="44" width="118" height="34" rx="7" class="box"/><text x="59" y="66" text-anchor="middle">Publisher A</text>
+    <rect x="0" y="104" width="118" height="34" rx="7" class="box"/><text x="59" y="126" text-anchor="middle">Publisher B</text>
+    <rect x="0" y="164" width="118" height="34" rx="7" class="box"/><text x="59" y="186" text-anchor="middle">Publisher C</text>
+  </g>
+  <g class="col">
+    <rect x="252" y="44" width="118" height="34" rx="7" class="box"/><text x="311" y="66" text-anchor="middle">Hermes</text>
+    <rect x="252" y="104" width="118" height="34" rx="7" class="box"/><text x="311" y="126" text-anchor="middle">OpenClaw</text>
+    <rect x="252" y="164" width="118" height="34" rx="7" class="box"/><text x="311" y="186" text-anchor="middle">Claude Code</text>
+  </g>
+  <g class="arrows tangled" marker-end="url(#arrow-warn)">
+    <line x1="118" y1="61" x2="252" y2="61"/><line x1="118" y1="61" x2="252" y2="121"/><line x1="118" y1="61" x2="252" y2="181"/>
+    <line x1="118" y1="121" x2="252" y2="61"/><line x1="118" y1="121" x2="252" y2="121"/><line x1="118" y1="121" x2="252" y2="181"/>
+    <line x1="118" y1="181" x2="252" y2="61"/><line x1="118" y1="181" x2="252" y2="121"/><line x1="118" y1="181" x2="252" y2="181"/>
+  </g>
+  <text x="0" y="230" class="label">nine packages, nine installers, nine update paths,</text>
+  <text x="0" y="248" class="label">and no common way to say who signed what</text>
+
+  <!-- With AXP -->
+  <line x1="410" y1="8" x2="410" y2="260" class="divider"/>
+  <text x="440" y="18" class="heading">With AXP</text>
+  <g class="col">
+    <rect x="440" y="44" width="106" height="34" rx="7" class="box"/><text x="493" y="66" text-anchor="middle">Publisher A</text>
+    <rect x="440" y="104" width="106" height="34" rx="7" class="box"/><text x="493" y="126" text-anchor="middle">Publisher B</text>
+    <rect x="440" y="164" width="106" height="34" rx="7" class="box"/><text x="493" y="186" text-anchor="middle">Publisher C</text>
+  </g>
+  <rect x="588" y="86" width="118" height="70" rx="9" class="box axp"/>
+  <text x="647" y="113" text-anchor="middle" class="on-axp strong">one signed</text>
+  <text x="647" y="133" text-anchor="middle" class="on-axp mono">manifest</text>
+  <g class="arrows" marker-end="url(#arrow-muted)">
+    <line x1="546" y1="61" x2="588" y2="112"/><line x1="546" y1="121" x2="588" y2="121"/><line x1="546" y1="181" x2="588" y2="130"/>
+    <line x1="706" y1="112" x2="748" y2="61"/><line x1="706" y1="121" x2="748" y2="121"/><line x1="706" y1="130" x2="748" y2="181"/>
+  </g>
+  <g class="col">
+    <rect x="748" y="44" width="102" height="34" rx="7" class="box"/><text x="799" y="66" text-anchor="middle">Hermes</text>
+    <rect x="748" y="104" width="102" height="34" rx="7" class="box"/><text x="799" y="126" text-anchor="middle">OpenClaw</text>
+    <rect x="748" y="164" width="102" height="34" rx="7" class="box"/><text x="799" y="186" text-anchor="middle">Claude Code</text>
+  </g>
+  <text x="440" y="230" class="label">the host verifies the signature, shows the permissions</text>
+  <text x="440" y="248" class="label">and installs through the runtime it serves</text>
+</svg>

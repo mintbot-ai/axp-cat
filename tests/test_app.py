@@ -22,6 +22,11 @@ def test_index_and_empty_catalog(client):
     index = client.get("/")
     assert index.status_code == 200
     assert "Agent Extension Protocol" in index.text
+    # The front page explains the problem and places AXP next to MCP and A2A,
+    # with two inline SVG figures that must stay CSP-clean (classes, no style=).
+    assert 'id="compare"' in index.text and "A2A" in index.text and "Model Context Protocol" in index.text
+    assert 'id="fig-problem"' in index.text and 'id="fig-layers"' in index.text
+    assert "style=" not in index.text
     assert index.headers["content-security-policy"].startswith("default-src 'self'")
     assert index.headers["x-content-type-options"] == "nosniff"
     catalog = client.get("/catalog")

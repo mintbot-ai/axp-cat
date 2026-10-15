@@ -2,18 +2,54 @@
 {% block content %}
 <section class="hero">
   <h1>One manifest to describe, install, update and verify an agent extension.</h1>
-  <p class="lead">The Agent Extension Protocol (AXP) is a runtime-neutral standard for packaged agent capabilities: memory backends, MCP servers, tools, channels, services, skills, prompts, panel views. A publisher writes one signed <code>agent-extension.json</code>; any host that speaks AXP can install it, keep it updated and know who signed it.</p>
+  <p class="lead">Agent runtimes multiply, and every one of them adds capabilities its own way. The Agent Extension Protocol (AXP) gives publishers one signed file, <code>agent-extension.json</code>, that says who they are, what the extension does, what it needs and how to install it on each runtime. Any host that reads AXP can install the extension, keep it updated and prove who signed it.</p>
   <p class="actions">
     <a class="button" href="/catalog">Browse the catalog{% if count %} ({{ count }}){% endif %}</a>
     <a class="button secondary" href="{{ site.spec_url }}">Read the specification</a>
   </p>
 </section>
 
-<section class="grid">
-  <div class="card">
-    <h2>An envelope, not a package manager</h2>
-    <p>AXP does not replace a runtime's own install machinery; it delegates to it. It is the common description layer every runtime can be generated from or mapped onto, the role OCI image manifests play across container runtimes. Nothing in the core names a vendor, a product or a registry.</p>
+<section id="problem">
+  <h2>The problem</h2>
+  <p>A memory backend, an MCP server, a channel bridge, a cron job: useful agent capabilities are written every week, and people want them in whatever runtime they already use. Today each runtime has its own plugin format, its own install steps and its own idea of an update. Three groups pay for that:</p>
+  <ul class="checks">
+    <li><strong>Publishers</strong> build and maintain one package per runtime, and re-explain what it needs in each one's own words.</li>
+    <li><strong>Users</strong> paste an install command and hope. Nothing standard tells them who published the thing, what it will touch on their machine, or how it will get updated.</li>
+    <li><strong>Hosts</strong>, the products that run agents for people, cannot enforce anything they were never told, so every install is a judgement call.</li>
+  </ul>
+  <figure class="diagram">
+    {% include "_fig_problem.html" %}
+    <figcaption>Without a shared description every publisher and every runtime need their own pair. With AXP the publisher writes one signed manifest and each host maps it onto the runtime it serves.</figcaption>
+  </figure>
+  <h2>What AXP does about it</h2>
+  <p>The publisher writes one <code>agent-extension.json</code> and signs it. It names the publisher, lists what the extension provides and requires, declares the permissions it uses and why, carries an install recipe per runtime, and says where updates come from. A host fetches the manifest, verifies the signature, shows the user what they are consenting to, hands the right recipe to the runtime, and later accepts an update only if the same key signed it.</p>
+  <p>AXP is deliberately an <strong>envelope, not a package manager</strong>. It does not replace a runtime's own install machinery; it delegates to it. It is the common description layer every runtime can be generated from or mapped onto, the role OCI image manifests play across container runtimes. Nothing in the core names a vendor, a product or a registry.</p>
+</section>
+
+<section id="compare">
+  <h2>How AXP relates to MCP, A2A and plugin systems</h2>
+  <p>They are easy to confuse because they all have "agent" in the name, but they answer different questions and sit at different layers. MCP and A2A are about agents <em>working</em>: an agent calling a tool, an agent handing a task to another agent. AXP is about how the things they work with <em>get onto the machine</em>, stay updated and stay trustworthy, before anything runs.</p>
+  <figure class="diagram">
+    {% include "_fig_layers.html" %}
+    <figcaption>A2A and MCP are spoken at run time. The runtime loads its extensions in its own format. AXP is the delivery layer underneath: it installs, updates and verifies those extensions on any runtime.</figcaption>
+  </figure>
+  <div class="table-scroll">
+  <table class="compare">
+    <thead><tr><th>Protocol</th><th>The question it answers</th><th>Who talks to whom</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td>MCP<br><span class="muted">Model Context Protocol</span></td><td>How does an agent call a tool or read context?</td><td>agent runtime &harr; tool server</td><td>while the agent runs</td></tr>
+      <tr><td>A2A<br><span class="muted">Agent2Agent</span></td><td>How does one agent hand work to another agent?</td><td>agent &harr; agent</td><td>while the agents run</td></tr>
+      <tr><td>Plugin systems<br><span class="muted">Hermes, OpenClaw, Claude Code, &hellip;</span></td><td>How does this one runtime load code?</td><td>runtime &harr; its own plugin format</td><td>at load time, per runtime</td></tr>
+      <tr class="axp"><td>AXP<br><span class="muted">Agent Extension Protocol</span></td><td>How does a capability get installed, updated and verified, whichever runtime?</td><td>publisher &rarr; host &rarr; runtime</td><td>before anything runs, and at every update</td></tr>
+    </tbody>
+  </table>
   </div>
+  <p>They stack rather than compete. An AXP package can contain an MCP server (<code>mcp_servers</code> is a first-class component) and an agent installed through AXP can speak A2A. In one sentence: MCP and A2A are how agents work; AXP is how the pieces they work with are shipped.</p>
+</section>
+
+<section>
+  <h2>What the manifest covers</h2>
+<div class="grid">
   <div class="card">
     <h2>Portable description</h2>
     <p><code>identity</code> (publisher-namespaced), <code>provides</code> (what the extension adds), <code>requires</code> (what it needs) and <code>permissions</code> (the access surface it declares, with reasons). A user can read what they are consenting to before anything runs.</p>
@@ -34,6 +70,11 @@
     <h2>Honest enforcement</h2>
     <p>A host says which tier it really applies - <code>declared</code>, <code>advisory</code> or <code>enforced</code> - and conforms to a profile (Core, Trusted, Managed, Sandboxed). The reference sandbox runs lifecycle scripts in transient systemd units with name-based egress filtering.</p>
   </div>
+  <div class="card">
+    <h2>Graceful degradation</h2>
+    <p>A manifest a verifying AXP host installs fully must also install by hand on a host with zero AXP support: the <code>posix</code> target is an archive and plain scripts, so nothing is locked behind the protocol.</p>
+  </div>
+</div>
 </section>
 
 <section>
