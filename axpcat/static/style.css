@@ -26,7 +26,9 @@ nav { display: flex; flex-wrap: wrap; gap: 0.2rem 1.25rem; }
 nav a { text-decoration: none; color: var(--fg); }
 nav a:hover { color: var(--accent); }
 main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
-footer { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+footer { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 2rem; max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+footer p { margin: 0; max-width: 60ch; }
+footer nav a { color: var(--muted); }
 h1 { font-size: 2rem; line-height: 1.2; margin: 0.5rem 0 1rem; }
 h2 { font-size: 1.3rem; margin: 2rem 0 0.6rem; }
 h3 { font-size: 1.05rem; margin: 1.2rem 0 0.4rem; }

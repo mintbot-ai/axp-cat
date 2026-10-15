@@ -27,7 +27,12 @@
 {% block content %}{% endblock %}
 </main>
 <footer>
-  <p>axp.cat is the public home of the <a href="{{ site.spec_repo_url }}">Agent Extension Protocol</a>, an open standard published under the MIT licence and run by <a href="https://mintbot.ai/">mintbot.ai</a>. Site source: <a href="{{ site.site_repo_url }}">mintbot-ai/axp-cat</a> &middot; machine-readable catalog: <a href="/api/catalog.json">/api/catalog.json</a></p>
+  <p>The Agent Extension Protocol is an open standard under the MIT licence, maintained by <a href="https://mintbot.ai/">mintbot.ai</a>.</p>
+  <nav aria-label="Footer">
+    <a href="{{ site.spec_repo_url }}">Specification source</a>
+    <a href="{{ site.site_repo_url }}">Site source</a>
+    <a href="/api/catalog.json">Catalog API (JSON)</a>
+  </nav>
 </footer>
 </body>
 </html>
