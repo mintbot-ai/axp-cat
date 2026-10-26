@@ -40,6 +40,17 @@ def test_index_and_empty_catalog(client):
     assert "Disallow: /submit" in client.get("/robots.txt").text
 
 
+def test_index_explains_axi_as_complementary_interface_design(client):
+    page = client.get("/").text
+    comparison = page.split('<section id="compare">', 1)[1].split("</section>", 1)[0]
+    assert '<a href="https://axi.md/">AXI</a>' in comparison
+    assert "Agent eXperience Interface" in comparison
+    assert "design principles" in comparison
+    assert "not an installation or trust protocol" in comparison
+    assert "AXI-style CLI" in comparison
+    assert "<th>Protocol or approach</th>" in comparison
+
+
 def test_submit_lists_a_valid_package(client):
     response = client.post("/submit", data={"locator": ORIGIN_URL}, follow_redirects=False)
     assert response.status_code == 303

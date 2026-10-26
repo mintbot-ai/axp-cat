@@ -38,25 +38,27 @@
 </section>
 
 <section id="compare">
-  <h2>How AXP relates to MCP, A2A and plugin systems</h2>
-  <p>They are easy to confuse because they all have "agent" in the name, but they answer different questions and sit at different layers. MCP and A2A are about agents <em>working</em>: an agent calling a tool, an agent handing a task to another agent. AXP is about how the things they work with <em>get onto the machine</em>, stay updated and stay trustworthy, before anything runs.</p>
+  <h2>How AXP relates to MCP, A2A, AXI and plugin systems</h2>
+  <p>These protocols and approaches answer different questions and sit at different layers. MCP and A2A are about agents <em>working</em>: an agent calling a tool, an agent handing a task to another agent. AXI is about making tool interfaces easier for agents to use. AXP is about how the things they work with <em>get onto the machine</em>, stay updated and stay trustworthy, before anything runs.</p>
   <figure class="diagram">
     {% include "_fig_layers.html" %}
     <figcaption>A2A and MCP are spoken at run time. The runtime loads its extensions in its own format. AXP is the delivery layer underneath: it installs, updates and verifies those extensions on any runtime.</figcaption>
   </figure>
   <div class="table-scroll">
   <table class="compare">
-    <thead><tr><th>Protocol</th><th>The question it answers</th><th>Who talks to whom</th><th>When</th></tr></thead>
+    <thead><tr><th>Protocol or approach</th><th>The question it answers</th><th>Who talks to whom</th><th>When</th></tr></thead>
     <tbody>
       <tr><td>MCP<br><span class="muted">Model Context Protocol</span></td><td>How does an agent call a tool or read context?</td><td>agent runtime &harr; tool server</td><td>while the agent runs</td></tr>
       <tr><td>A2A<br><span class="muted">Agent2Agent</span></td><td>How does one agent hand work to another agent?</td><td>agent &harr; agent</td><td>while the agents run</td></tr>
+      <tr><td><a href="https://axi.md/">AXI</a><br><span class="muted">Agent eXperience Interface</span></td><td>How can a tool expose a concise, agent-friendly interface?</td><td>agent &harr; CLI tool</td><td>while the agent uses a tool</td></tr>
       <tr><td>Plugin systems<br><span class="muted">Hermes, OpenClaw, Claude Code, &hellip;</span></td><td>How does this one runtime load code?</td><td>runtime &harr; its own plugin format</td><td>at load time, per runtime</td></tr>
       <tr><td>Package managers<br><span class="muted">apt, npm, pip, &hellip;</span></td><td>How do the files of one ecosystem get onto a machine?</td><td>registry &rarr; machine</td><td>when you run them</td></tr>
       <tr class="axp"><td>AXP<br><span class="muted">Agent Extension Protocol</span></td><td>How does a capability get installed, updated and verified, whichever runtime?</td><td>publisher &rarr; host &rarr; runtime</td><td>before anything runs, and at every update</td></tr>
     </tbody>
   </table>
   </div>
-  <p>They stack rather than compete. An AXP package can contain an MCP server (<code>mcp_servers</code> is a first-class component) and an agent installed through AXP can speak A2A. In one sentence: MCP and A2A are how agents work; AXP is how the pieces they work with are shipped.</p>
+  <p>They stack rather than compete. An AXP package can contain an MCP server (<code>mcp_servers</code> is a first-class component) and an agent installed through AXP can speak A2A.</p>
+  <p>AXI offers design principles and reference tools for agent-facing interfaces: concise results, actionable errors and fewer unnecessary interaction steps. It is not an installation or trust protocol. An AXP package can ship an AXI-style CLI and its usage skill: AXI guides how the agent uses the tool; AXP describes its permissions, verifies its provenance and manages its installation and updates. Neither requires the other.</p>
 </section>
 
 <section>
